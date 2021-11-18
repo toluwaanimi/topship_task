@@ -1,0 +1,30 @@
+# This is our deploy workflow/pipeline that points to heroku
+
+name: Deploy Docker Container to Heroku
+on:
+  push:
+    branches:
+      - main
+jobs:
+  deploy-staging:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Login to Heroku Container Registry
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        run: heroku container:login
+
+      - name: Build and push to Heroku Container Registry
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        run: heroku container:push -a ${{ secrets.HEROKU_APP_NAME_STAGING }}  web
+
+      - name: Publish New Release
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        run: |
+          heroku container:release -a ${{ secrets.HEROKU_APP_NAME_STAGING }}  web
+          echo "You can now access the new staging realease of ${{ secrets.HEROKU_APP_NAME_STAGING }}"
