@@ -1,7 +1,7 @@
 {
   "name": "topship",
   "version": "1.0.0",
-  "description": "Task Challenge by Metacare",
+  "description": "Task Challenge by TopShip",
   "main": "dist/index.js",
   "scripts": {
     "clean": "rimraf dist",
